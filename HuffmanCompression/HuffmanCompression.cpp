@@ -44,7 +44,7 @@ struct HuffmanTree {
 
 unordered_map<char, int> calcSymbolFrequency(const string& fileName) {
     unordered_map<char, int> frequencyTable;
-    ifstream inputFile(fileName);
+    ifstream inputFile (fileName);
 
     //need to add some contingency to handle errors with input file
     if (!inputFile) {
@@ -144,13 +144,13 @@ void compressFile(const string& originalFile, const string& compressedFile, cons
 
 
 int main()
-{
+{   
     //Defines all necessary things to run compression algorithm on a text file
     //this main method contains a sample run with a random_text.txt file as the input, the file is in the same working directory as this code
 
     string inputFile = "random_text.txt";
     //calculating input file size
-    ifstream input(inputFile, ios::binary);
+    ifstream input(inputFile);
     input.seekg(0, ios::end);
     long long fileSize = input.tellg();
     input.close();
