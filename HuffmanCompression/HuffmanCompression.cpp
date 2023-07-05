@@ -116,21 +116,35 @@ void compressFile(const string& originalFile, const string& compressedFile, cons
         cerr << "Error opening original/input file!" << originalFile << endl;
         return;
     }
-    //gets huffman codes
+
     char character;
     string hCode;
+    int bitCount = 0;
+    char outputByte = 0x00;
+    
     while (input.get(character)) {
         hCode = huffmanCodes.at(character);
 
         for (char bit : hCode) {
-            if (bit == '0') {
-                output.put(0x00);
-            }
-            else {
-                output.put(0x01);
+            outputByte = outputByte << 1;  // need to shift left to make room for the next bit
+
+            if (bit == '1') {
+                outputByte = outputByte | 0x01;  // add the new bit to existing byte
             }
 
+            bitCount++;
+
+            if (bitCount == 8) {  // we have a full byte
+                output.put(outputByte); //add byte
+                outputByte = 0x00; //reset current to empty byte
+                bitCount = 0; //reset bitcount for current byte
+            }
         }
+    }
+
+    if (bitCount > 0) {  // need to handle any remaining bits
+        outputByte = outputByte << (8 - bitCount);  // shift left to make remaining bits the most significant bits
+        output.put(outputByte);
     }
 
     input.close();
@@ -140,6 +154,7 @@ void compressFile(const string& originalFile, const string& compressedFile, cons
     double compressionRatio = (static_cast<double>(output.tellp()) / huffmanTree.originalFileSize) * 100;
     cout << "Compression Ratio: " << compressionRatio << "%" << endl;
 }
+
 
 
 

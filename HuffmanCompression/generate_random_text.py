@@ -18,7 +18,7 @@ def save_text_to_file(text, filename):
 
 def main():
     # Define the desired length of the random text
-    text_length = 10000
+    text_length = 1000
 
     # Generate random text
     random_text = generate_random_text(text_length)
